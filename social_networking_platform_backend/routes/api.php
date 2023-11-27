@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,4 +24,9 @@ Route::prefix('auth')->name('authenticate')->controller(AuthenticationController
     Route::post('login','userLogin');
     Route::post('logout','userLogout')-> middleware('auth:api');
 });
+
+Route::prefix('posts')->controller(PostController::class)->group(function () {
+    Route::get('getPosts','getAllPosts');
+});
+
 
