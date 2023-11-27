@@ -27,6 +27,9 @@ Route::prefix('auth')->name('authenticate')->controller(AuthenticationController
 
 Route::prefix('posts')->controller(PostController::class)->group(function () {
     Route::get('getPosts','getAllPosts');
+    Route::delete('deletePost/{id}','delete');
+    Route::get('getPost/{id}','getById');
+
 });
 
 

@@ -21,7 +21,7 @@ class PostsService
 
     public function getPostById($id)
     {
-        return $Post::findOrFail($id);
+        return Post::findOrFail($id);
     }
 
     public function updatePost() 

@@ -57,7 +57,12 @@ class PostController extends Controller
      */
     public function getById($postId)
     {
-        //
+        try {
+            $post = $this->postsService->getPostById($postId);
+            return $this->successResponse($post);
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getStatus(), $e->getMessage());
+        }
     }
 
     /**
@@ -81,8 +86,7 @@ class PostController extends Controller
     public function delete($postId)
     {
         try {
-            $this->postsService->deletePost($id);
-            return response()->json([], 204);
+            $this->postsService->deletePost($postId);
             return $this->successResponse([], 'Deleted successfully', 204);
         } catch (Exception $e) {
             return $this->errorResponse($e->getStatus(), $e->getMessage());
