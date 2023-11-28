@@ -3,4 +3,5 @@ export class post {
     description!: string | null;
     tags!: string | null;
     id: number | undefined;
+    fileUrl!: string | null;
 }

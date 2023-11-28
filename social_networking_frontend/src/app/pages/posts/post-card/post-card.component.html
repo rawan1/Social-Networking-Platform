@@ -1,0 +1,25 @@
+<div class="card mx-auto p-1 mt-2 w-75">
+    <div class="card-header p-4">
+        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">{{post.title}}</h5>
+        <p class="card-text">{{post.description}}</p>
+    </div>
+    <img class="card-img-bottom" [src]="post.fileUrl | imgUrl" alt="Card image cap">
+
+    <div class="card-footer p-2">
+        <div class="container-fluid text-center">
+            <div class="row align-items-start">
+                <div class="col">
+                    <i class="bi bi-suit-heart button-i">Likes</i>
+                </div>
+                <div class="col">
+                    <i class="bi bi-twitch button-i">Comments</i>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

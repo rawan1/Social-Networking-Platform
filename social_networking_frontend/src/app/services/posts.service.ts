@@ -15,7 +15,7 @@ export class PostsService {
   createPost(payload: any) {
     return this.http.post(this.backendUrl + '/createPost', payload);
   }
-  
+
   editPost(payload: any, postId: number) {
     return this.http.put(this.backendUrl + `/updatePost/${postId}`, payload);
   }
@@ -23,11 +23,11 @@ export class PostsService {
   deletePost(postId: number) {
     return this.http.delete(this.backendUrl + `/deletePost/${postId}`);
   }
-  getAllPosts() {
-    return this.http.get(this.backendUrl + '?limit=20');
+  getAllPosts(): Observable<{ data: Array<post> }> {
+    return this.http.get<{ data: Array<post> }>(this.backendUrl + '/getPosts?limit=20');
   }
-  getPostById(postId: number): Observable<{data: post}> {
-    return this.http.get<{data: post}>(this.backendUrl + `/getPost/${postId}`);
+  getPostById(postId: number): Observable<{ data: post }> {
+    return this.http.get<{ data: post }>(this.backendUrl + `/getPost/${postId}`);
   }
   searchforPosts(searchTerm: string) {
     return this.http.get(this.backendUrl + `?searchTerm=${searchTerm}`);
