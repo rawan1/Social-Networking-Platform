@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\post;
 use App\Services\PostsService;
 use Illuminate\Http\JsonResponse;
-
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -38,14 +38,24 @@ class PostController extends Controller
         return $this->successResponse($posts);
     }
 
+
     /**
-     * Show the form for creating a new post.
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * save new post in the db
      */
-    public function create()
-    {
-        //
+    public function storePost(Request $request) 
+    {   
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|max:255',
+            'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+        ]);
+        if ($validator->fails()) {
+            return $this->errorResponse('400', 'There is an invalid data');
+        } else {
+            $postData = $request->all();
+            $this->postsService->createPost($request, $request->user());
+            return $this->successResponse([], 'Created successfully', 204);
+        }
+       
     }
 
 
@@ -69,12 +79,21 @@ class PostController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\post  $post
+     * @param    $postId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, post $post)
+    public function updatePost(Request $request, $postId)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|max:255',
+            'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+        ]);
+        if ($validator->fails()) {
+            return $this->errorResponse('400', $request->all());
+        } else {
+            $this->postsService->updatePost($request);
+            return $this->successResponse([], 'Created successfully', 204);
+        }
     }
 
     /**
@@ -83,7 +102,7 @@ class PostController extends Controller
      * @param   $postId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delete($postId)
+    public function deletePost($postId)
     {
         try {
             $this->postsService->deletePost($postId);
@@ -91,5 +110,15 @@ class PostController extends Controller
         } catch (Exception $e) {
             return $this->errorResponse($e->getStatus(), $e->getMessage());
         }
+    }
+    /**
+     * @param   $searchTerm
+     * @return \Illuminate\Http\JsonResponse
+     * this will return a list of posts that satisfied the search term
+     */
+    public function searchPost($searchTerm)
+    {
+        $posts = $this->postsService->searchPosts($searchTerm);
+        return $this->successResponse($posts);
     }
 }

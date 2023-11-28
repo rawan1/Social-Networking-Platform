@@ -12,10 +12,10 @@ class Post extends Model
     protected $fillable = [
         'title',
         'description',
-        'userId',
-        'creationDate',
-        'updateDate',
-        'fileUrl',
+        'user_id',
+        'created_at',
+        'updated_at',
+        'file_url',
 
     ];
 

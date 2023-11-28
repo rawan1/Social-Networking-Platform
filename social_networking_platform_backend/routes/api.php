@@ -27,8 +27,11 @@ Route::prefix('auth')->name('authenticate')->controller(AuthenticationController
 
 Route::prefix('posts')->controller(PostController::class)->group(function () {
     Route::get('getPosts','getAllPosts');
-    Route::delete('deletePost/{id}','delete');
+    Route::delete('deletePost/{id}','deletePost');
     Route::get('getPost/{id}','getById');
+    Route::post('createPost','storePost');
+    Route::put('updatePost/{id}','updatePost');
+    Route::get('searchPosts','searchPost');
 
 });
 
