@@ -6,11 +6,10 @@ use Illuminate\Http\Request;
 use App\Services\CommentsService;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
+use App\Http\Requests\CommentRequest;
 
 class CommentsController extends Controller
 {
-
-
     /**
      * @var commentsService
      */
@@ -26,25 +25,12 @@ class CommentsController extends Controller
         $this->commentsService = $commentsService;
     }
 
-    public function show_comments($postId) {
+    public function showComments(int $postId) {
         return $this->commentsService->show_comments($postId);
     }
 
-    public function AddComment(Request $request, $postId) {
-        $validator = $this->validateComment();
-        if($validator->fails()){
-            return $this->errorResponse('400', $request->all());
-        }
+    public function addComment(CommentRequest $request,int $postId) {
         $this->commentsService->addComment($request, $postId);
         return $this->successResponse([], 'Added successfully', 204);
     }
-
-    public function validateComment(){
-        return Validator::make(request()->all(), [
-            'text' => 'required|string|min:3|max:255',
-        ]);
-    }
-
-
-
 }

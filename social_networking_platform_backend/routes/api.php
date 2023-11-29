@@ -17,13 +17,13 @@ use App\Http\Controllers\CommentsController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 Route::prefix('auth')->name('authenticate')->controller(AuthenticationController::class)->group(function () {
     Route::post('login','userLogin');
-    Route::post('Register', 'userRegisteration');
+    Route::post('register', 'userRegisteration');
     Route::post('logout','userLogout')-> middleware('auth:api');
 });
 
@@ -34,12 +34,11 @@ Route::prefix('posts')->controller(PostController::class)->middleware('auth:api'
     Route::post('createPost','storePost');
     Route::put('updatePost/{id}','updatePost');
     Route::get('searchPosts','searchPost');
-
 });
 
 Route::prefix('comments')->controller(CommentsController::class)->middleware('auth:api')->group(function () {
-    Route::get('getPostComments/{postId}','show_comments');
-    Route::post('AddComment/{postId}','AddComment');
+    Route::get('post-comments/{postId}','showComments');
+    Route::post('add-comment/{postId}','addComment');
 
 });
 

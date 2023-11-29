@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\RegisterUserRequest;
+
 class AuthenticationController extends Controller
 {
     public function userLogin() {
@@ -29,24 +31,17 @@ class AuthenticationController extends Controller
             return  $this->errorResponse(400, 'Failed to logging out');
         }
     }
-    public function userRegisteration(Request $request) {
-        $validator = $this->validateUser();
-        if ($validator->fails()) {
-            return $this->errorResponse('400', $request->all());
-        } else {
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password)
-            ]);
-            return $this->successResponse([], 'Registered successfully', 200);
-        }
-    }
-    public function validateUser(){
-        return Validator::make(request()->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8',
+    /**
+     * param RegisterUserRequest $request
+     * This endpoint is for registering new user
+     */
+    public function userRegisteration(RegisterUserRequest $request) {
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
         ]);
+        return $this->successResponse([], 'Registered successfully', 200);
     }
+    
 }

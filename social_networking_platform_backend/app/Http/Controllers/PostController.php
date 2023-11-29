@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Jobs\SendEmailJob;
+use App\Http\Requests\PostRequest;
 
 class PostController extends Controller
 {
@@ -31,10 +32,10 @@ class PostController extends Controller
 
     /**
      * Display a listing of the posts.
-     ** @param  Requst  $request
+     ** @param  PostRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getAllPosts(Request $request): JsonResponse
+    public function getAllPosts(PostRequest $request): JsonResponse
     {
         $posts = $this->postsService->getAll(max($request->input('limit'), 10));
         return $this->successResponse($posts);
@@ -44,25 +45,17 @@ class PostController extends Controller
     /**
      * save new post in the db
      */
-    public function storePost(Request $request) 
+    public function storePost(PostRequest $request) 
     {   
-        $validator = $this->validatePost();
-        if ($validator->fails()) {
-            return $this->errorResponse('400', 'There is an invalid data');
-        } else {
-            $postData = $request->all();
-            $this->postsService->createPost($request, $request->user());
+        $postData = $request->all();
+        $this->postsService->createPost($request, $request->user());
 
-            $users = User::where('id', '<>', 1)->get();
-            foreach($users as $user){
-                SendEmailJob::dispatch($user)
-                ->delay(now()->addMinutes(60));
-            }
-
-            
-            return $this->successResponse([], 'Created successfully', 204);
+        $users = User::where('id', '<>', 1)->get();
+        foreach($users as $user){
+            SendEmailJob::dispatch($user)
+            ->delay(now()->addMinutes(60));
         }
-       
+        return $this->successResponse([], 'Created successfully', 200);
     }
 
 
@@ -72,7 +65,7 @@ class PostController extends Controller
      * @param    $postIs
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getById($postId)
+    public function getById(int $postId)
     {
         try {
             $post = $this->postsService->getPostById($postId);
@@ -85,19 +78,14 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Requests\PostRequest  $request
      * @param    $postId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updatePost(Request $request, $postId)
+    public function updatePost(PostRequest $request, int $postId)
     {
-        $validator = $this->validatePost();
-        if ($validator->fails()) {
-            return $this->errorResponse('400', $request->all());
-        } else {
-            $this->postsService->updatePost($request);
-            return $this->successResponse([], 'Created successfully', 204);
-        }
+        $this->postsService->updatePost($request);
+        return $this->successResponse([], 'Created successfully', 204);
     }
 
     /**
@@ -106,7 +94,7 @@ class PostController extends Controller
      * @param   $postId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function deletePost($postId)
+    public function deletePost(int $postId)
     {
         try {
             $this->postsService->deletePost($postId);
@@ -120,16 +108,10 @@ class PostController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * this will return a list of posts that satisfied the search term
      */
-    public function searchPost($searchTerm)
+    public function searchPost(string $searchTerm)
     {
         $posts = $this->postsService->searchPosts($searchTerm);
         return $this->successResponse($posts);
     }
 
-    public function validatePost(){
-        return Validator::make(request()->all(), [
-            'title' => 'required|max:255',
-            'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-        ]);
-    }
 }
