@@ -8,8 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     use HasFactory;
-    
+   
+    protected $fillable = [
+        'text',
+        'created_at'
+    ];
     public function user() {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->select('name', 'id');
     }
 }

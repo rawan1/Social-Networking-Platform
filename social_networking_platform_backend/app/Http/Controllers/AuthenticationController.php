@@ -3,17 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\User;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 class AuthenticationController extends Controller
 {
     public function userLogin() {
         if(auth() -> attempt(['email' => request('email'), 'password' => request('password')])) {
             $user = User::find(Auth::user() -> id);
-            $user_token['token'] = $user -> createToken('appToken') -> accessToken;
+            $user_token= $user -> createToken('appToken') -> accessToken;
 
             return $this->successResponse([
                 'token' => $user_token,
-                'user' => $user,
+                'name' => $user->name,
             ]);
         }else {
             return  $this->errorResponse(401, 'Failed to login');
@@ -26,5 +28,25 @@ class AuthenticationController extends Controller
         }else {
             return  $this->errorResponse(400, 'Failed to logging out');
         }
+    }
+    public function userRegisteration(Request $request) {
+        $validator = $this->validateUser();
+        if ($validator->fails()) {
+            return $this->errorResponse('400', $request->all());
+        } else {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password)
+            ]);
+            return $this->successResponse([], 'Registered successfully', 200);
+        }
+    }
+    public function validateUser(){
+        return Validator::make(request()->all(), [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8',
+        ]);
     }
 }

@@ -44,10 +44,7 @@ class PostController extends Controller
      */
     public function storePost(Request $request) 
     {   
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|max:255',
-            'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-        ]);
+        $validator = $this->validatePost();
         if ($validator->fails()) {
             return $this->errorResponse('400', 'There is an invalid data');
         } else {
@@ -84,10 +81,7 @@ class PostController extends Controller
      */
     public function updatePost(Request $request, $postId)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|max:255',
-            'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-        ]);
+        $validator = $this->validatePost();
         if ($validator->fails()) {
             return $this->errorResponse('400', $request->all());
         } else {
@@ -120,5 +114,12 @@ class PostController extends Controller
     {
         $posts = $this->postsService->searchPosts($searchTerm);
         return $this->successResponse($posts);
+    }
+
+    public function validatePost(){
+        return Validator::make(request()->all(), [
+            'title' => 'required|max:255',
+            'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+        ]);
     }
 }

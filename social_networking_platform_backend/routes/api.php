@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,10 +23,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('auth')->name('authenticate')->controller(AuthenticationController::class)->group(function () {
     Route::post('login','userLogin');
+    Route::post('Register', 'userRegisteration');
     Route::post('logout','userLogout')-> middleware('auth:api');
 });
 
-Route::prefix('posts')->controller(PostController::class)->group(function () {
+Route::prefix('posts')->controller(PostController::class)->middleware('auth:api')->group(function () {
     Route::get('getPosts','getAllPosts');
     Route::delete('deletePost/{id}','deletePost');
     Route::get('getPost/{id}','getById');
@@ -34,5 +36,12 @@ Route::prefix('posts')->controller(PostController::class)->group(function () {
     Route::get('searchPosts','searchPost');
 
 });
+
+Route::prefix('comments')->controller(CommentsController::class)->middleware('auth:api')->group(function () {
+    Route::get('getPostComments/{postId}','show_comments');
+    Route::post('AddComment/{postId}','AddComment');
+
+});
+
 
 
