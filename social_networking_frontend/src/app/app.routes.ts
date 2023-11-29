@@ -3,14 +3,17 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/users/login/login.component';
 import { RegisterComponent } from './pages/users/register/register.component';
 import { HomeComponent } from './pages/home/home.component';
+import { provideGuardForPermission } from './services/auth.guard';
 
 export const routes: Routes = [
     {
-        path: '',
+        path: 'home',
+        canActivate: [provideGuardForPermission()],
         component: HomeComponent,
     },
     {
         path: 'posts',
+        canActivate: [provideGuardForPermission()],
         loadChildren: () => import('./pages/posts/posts.module').then(m => m.PostsModule)
     },
     {
@@ -23,7 +26,7 @@ export const routes: Routes = [
     },
     {
         path: '',
-        redirectTo: 'login',
+        redirectTo: 'home',
         pathMatch: 'full'
     },
     {
