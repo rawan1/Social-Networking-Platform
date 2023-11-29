@@ -19,13 +19,8 @@
                 </div>
 
             </div>
-            <div class="row comments-list text-left p-2 mt-2" *ngIf="comments.length>0">
-                <ul>
-                    <li *ngFor="let comment of comments">
-                        {{comment}}
-                    </li>
-                    
-                </ul>
+            <div class="row comments-list text-left p-2 mt-2" *ngIf="showComments">
+                <app-comments-list *ngIf="post.id" [postId]="post.id"></app-comments-list>
             </div>
         </div>
     </div>

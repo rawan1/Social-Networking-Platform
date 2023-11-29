@@ -1,0 +1,11 @@
+<div>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <app-add-comment [postId]="postId" (commentAdded)="commentAdded($event)"></app-add-comment>
+
+        </li>
+        <li class="list-group-item" *ngFor="let comment of comments">
+            {{comment.text}}
+        </li>
+    </ul>
+</div>

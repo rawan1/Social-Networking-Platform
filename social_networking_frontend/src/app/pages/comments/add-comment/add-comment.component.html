@@ -1,0 +1,4 @@
+<form [formGroup]="commentForm" (ngSubmit)="submit()">
+    <input type="text" formControlName="text" id="text" class="form-control" type="text" placeholder="type here…">
+    <button [disabled]="!(commentForm.valid && commentForm.dirty)" type="submit" class="btn btn-primary mb-2">Save</button>
+</form>
