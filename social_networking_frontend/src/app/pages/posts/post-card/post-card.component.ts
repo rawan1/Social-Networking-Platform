@@ -13,7 +13,7 @@ import { ImgUrlPipe } from '../../../pipes/img-url.pipe';
 export class PostCardComponent implements OnInit {
   @Input()
   post!: post;
-
+  comments: string[] = [];
 
   ngOnInit(): void {
     console.log(this.post)
@@ -24,7 +24,8 @@ export class PostCardComponent implements OnInit {
 
   }
   commentPressed() {
-
+    console.log('Clicked');
+    this.comments = ['That is greate', 'Awsowme', 'Hello World', 'Just for testing'];
   }
 }
 

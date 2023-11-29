@@ -1,8 +1,14 @@
 .button-i {
     cursor: pointer;
 }
+
 .card-img-bottom {
     width: 100%;
     height: 10v;
     object-fit: cover;
-    }
+}
+
+.comments-list {
+    height: 100px;
+    overflow-y: auto;
+}

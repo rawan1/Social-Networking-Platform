@@ -1,0 +1,45 @@
+<div class="card" style="width: 50%;">
+    <h4 class="card-header">Register</h4>
+    <div class="card-body">
+        <div class="card-title" *ngIf="errors">
+            <div *ngFor="let item of errors | keyvalue" class="alert alert-danger">
+                <b>{{item.key}}</b>: <b>{{item.value}}</b>
+            </div>
+        </div>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control " formControlName="name" id="name" placeholder="name">
+                <div *ngIf="f['name'].invalid && (f['name'].dirty || f['name'].touched)" class="text-danger">
+                    <small *ngIf="f['name'].errors?.['required']">
+                        name is required.
+                    </small>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" formControlName="email" class="form-control" />
+                <div *ngIf="f['email'].invalid && (f['email'].dirty || f['email'].touched)" class="text-danger">
+                    <small *ngIf="f['email'].errors?.['required']">
+                        email is required.
+                    </small>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" formControlName="password" class="form-control" />
+                <div *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)" class="text-danger">
+                    <small *ngIf="f['password'].errors">
+                        Please enter valid password
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button [disabled]="loading" class="btn btn-primary">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                    Register
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

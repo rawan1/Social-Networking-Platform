@@ -32,5 +32,10 @@ export class PostsService {
   searchforPosts(searchTerm: string) {
     return this.http.get(this.backendUrl + `?searchTerm=${searchTerm}`);
   }
+  likePost(postId: number) {
 
+  }
+  getAllLikes(postId: number) {
+
+  }
 }
