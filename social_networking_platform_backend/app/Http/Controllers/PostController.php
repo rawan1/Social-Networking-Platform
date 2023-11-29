@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\post;
+use App\Models\User;
 use App\Services\PostsService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use App\Jobs\SendEmailJob;
 
 class PostController extends Controller
 {
@@ -50,6 +52,14 @@ class PostController extends Controller
         } else {
             $postData = $request->all();
             $this->postsService->createPost($request, $request->user());
+
+            $users = User::where('id', '<>', 1)->get();
+            foreach($users as $user){
+                SendEmailJob::dispatch($user)
+                ->delay(now()->addMinutes(60));
+            }
+
+            
             return $this->successResponse([], 'Created successfully', 204);
         }
        
