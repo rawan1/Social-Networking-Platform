@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { post } from '../../../models/post.model';
 import { ImgUrlPipe } from '../../../pipes/img-url.pipe';
 import { CommentsListComponent } from '../../comments/comments-list/comments-list.component';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { PostsService } from '../../../services/posts.service';
 
 @Component({
   selector: 'app-post-card',
   standalone: true,
-  imports: [CommonModule, ImgUrlPipe, CommentsListComponent],
+  imports: [CommonModule, ImgUrlPipe, CommentsListComponent, RouterModule],
   templateUrl: './post-card.component.html',
   styleUrl: './post-card.component.css'
 })
@@ -17,7 +17,7 @@ export class PostCardComponent implements OnInit {
   @Input()
   post!: post;
   showComments: boolean = false;
-
+  @Input() isDetailsView: boolean = false;
   constructor(private route: Router, private postService: PostsService) { }
   ngOnInit(): void {
     console.log(this.post)
@@ -39,5 +39,8 @@ export class PostCardComponent implements OnInit {
         window.location.reload();
       });
   }
+  viewPost() {
+    this.route.navigateByUrl(`posts/post-details/${this.post.id}`);
+   }
 }
 

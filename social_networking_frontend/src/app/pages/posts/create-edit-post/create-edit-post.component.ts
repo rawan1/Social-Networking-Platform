@@ -25,7 +25,7 @@ export class CreateEditPostComponent implements OnInit, OnDestroy {
   serviceSubscribe: Subscription | undefined;
   postForm = this.formBuilder.group({
     title: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(255)]),
-    description: new FormControl('', [Validators.minLength(10)]),
+    description: new FormControl('', [Validators.minLength(5)]),
     tags: new FormControl(''),
   });
   constructor(private route: ActivatedRoute,

@@ -1,4 +1,4 @@
-<div class="card mx-auto p-1 mt-2 w-75">
+<div class="card mx-auto p-1 mt-2 w-100">
     <div class="card-header p-1 d-inline">
         <span class="card-text"><small class="text-muted">Last updated 3 mins ago</small></span>
         <div class="d-flex justify-content-end">
@@ -7,6 +7,9 @@
             </button>
             <button class="btn btn-sm btn-outline-danger" (click)="deletePost()">
                 <i class="bi bi-trash"></i>
+            </button>
+            <button *ngIf="!isDetailsView" routerLink="`../posts/post-details/${post.id}`" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-arrow-up-right-square"></i>
             </button>
         </div>
         <div class="card-body">
