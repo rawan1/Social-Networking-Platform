@@ -1,28 +1,39 @@
 <div class="card mx-auto p-1 mt-2 w-75">
-    <div class="card-header p-4">
-        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-    </div>
-    <div class="card-body">
-        <h5 class="card-title">{{post.title}}</h5>
-        <p class="card-text">{{post.description}}</p>
-    </div>
-    <img class="card-img-bottom" [src]="post.fileUrl | imgUrl" alt="Card image cap">
+    <div class="card-header p-1 d-inline">
+        <span class="card-text"><small class="text-muted">Last updated 3 mins ago</small></span>
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-sm btn-outline-primary" (click)="editPost()">
+                <i class="bi bi-pen"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deletePost()">
+                <i class="bi bi-trash"></i>
+            </button>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{post.title}}</h5>
+            <p class="card-text">{{post.description}}</p>
+        </div>
+        <img class="card-img-bottom" [src]="post.fileUrl | imgUrl" alt="Card image cap">
 
-    <div class="card-footer p-2">
-        <div class="container-fluid ">
-            <div class="row align-items-start text-center">
-                <div class="col">
-                    <i class="bi bi-suit-heart button-i">Likes</i>
-                </div>
-                <div class="col">
-                    <i (click)="commentPressed()" class="bi bi-twitch button-i">Comments</i>
-                </div>
+        <div class="card-footer p-2">
+            <div class="container-fluid ">
+                <div class="row align-items-start text-center">
+                    <div class="col">
+                        <span class="badge badge-pill badge-dark text-black">
+                            {{post.likes_count}}
+                        </span>
+                        <i class="bi bi-suit-heart button-i">Likes</i>
 
-            </div>
-            <div class="row comments-list text-left p-2 mt-2" *ngIf="showComments">
-                <app-comments-list *ngIf="post.id" [postId]="post.id"></app-comments-list>
+                    </div>
+                    <div class="col">
+                        <i (click)="commentPressed()" class="bi bi-twitch button-i">Comments</i>
+                    </div>
+
+                </div>
+                <div class="row comments-list text-left p-2 mt-2" *ngIf="showComments">
+                    <app-comments-list *ngIf="post.id" [postId]="post.id"></app-comments-list>
+                </div>
             </div>
         </div>
-    </div>
 
-</div>
+    </div>

@@ -1,4 +1,4 @@
-<div class="card mx-auto p-1 mt-2" style="width: 50%;">
+<div class="card border-primary mx-auto p-1 mt-2" style="width: 50%;">
   <h4 *ngIf="mode === 'create'" class="card-header">Create new post</h4>
   <h4 *ngIf="mode === 'edit'" class="card-header">Edit</h4>
 
@@ -44,7 +44,7 @@
         </div>
         <!--Preview Photo-->
         <div class="image-preview mb-3" *ngIf="imagePrev">
-          <i class="trash btn btn-danger removeImg" size="tiny" aria-hidden="true" (click)="deleteImg()"></i>
+          <i class="bi bi-trash btn btn-danger removeImg" size="tiny" aria-hidden="true" (click)="deleteImg()"></i>
           <img [src]="imagePrev" class="img img-thumbnail" />
         </div>
         <div>

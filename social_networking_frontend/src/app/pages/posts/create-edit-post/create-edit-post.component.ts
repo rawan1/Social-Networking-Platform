@@ -5,11 +5,13 @@ import { PostsService } from '../../../services/posts.service';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subscription, catchError, map } from 'rxjs';
 import { post } from '../../../models/post.model';
+import { ImgUrlPipe } from '../../../pipes/img-url.pipe';
 
 @Component({
   selector: 'app-create-edit-post',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
+  providers: [ImgUrlPipe],
   templateUrl: './create-edit-post.component.html',
   styleUrl: './create-edit-post.component.css'
 })
@@ -29,7 +31,8 @@ export class CreateEditPostComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute,
     private postService: PostsService,
     public formBuilder: FormBuilder,
-    private router: Router) {
+    private router: Router,
+    private transformUrl: ImgUrlPipe) {
     this.postId = Number(this.route.snapshot.paramMap.get('id') ?? -1);
   }
   ngOnDestroy(): void {
@@ -45,6 +48,7 @@ export class CreateEditPostComponent implements OnInit, OnDestroy {
             description: postData.description,
             tags: postData.tags
           });
+          this.imagePrev = this.transformUrl.transform(postData.fileUrl);
         });
     }
   }
@@ -75,13 +79,16 @@ export class CreateEditPostComponent implements OnInit, OnDestroy {
   submit() {
     const formData = new FormData();
     formData.append("image", this.imageFile);
-    formData.append('details', JSON.stringify(this.postForm.value));
+    for (const [key, value] of Object.entries(this.postForm.value)) {
+      if (value && value !== '')
+        formData.append(key, value);
+    }
     this.serviceSubscribe = this.postService.createPost(formData).pipe(
       catchError(async (e) => this.error = e.error,
       ),
     ).subscribe((r) => {
       if (r !== 'Invalid input') {
-        this.router.navigate(['./'])
+        this.router.navigateByUrl('/home');
       }
     });
   }

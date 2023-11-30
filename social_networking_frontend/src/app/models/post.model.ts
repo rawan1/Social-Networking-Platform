@@ -4,4 +4,5 @@ export class post {
     tags!: string | null;
     id: number | undefined;
     fileUrl!: string | null;
+    likes_count!: number;
 }
