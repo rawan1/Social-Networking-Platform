@@ -25,7 +25,7 @@ class AuthenticationController extends Controller
     }
     public function userLogout() {
         if(Auth::user()) {
-            $request -> user() -> token() -> revoke();
+            Auth::user() -> token() -> revoke();
             return $this->successResponse(null, 'Logged out successfully');
         }else {
             return  $this->errorResponse(400, 'Failed to logging out');

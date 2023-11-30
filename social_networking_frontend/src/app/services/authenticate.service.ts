@@ -25,4 +25,8 @@ import { loginResponse } from '../models/loginResponse.model'
     register(payload: userRegisterationModel): Observable<any> {
       return this.http.post<any>(this.backendUrl + 'register', payload);
     }
+    logout(): Observable<unknown> {
+      return this.http.post<unknown>(this.backendUrl + 'logout', {});
+
+    }
   }

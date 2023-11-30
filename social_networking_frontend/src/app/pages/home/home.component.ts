@@ -4,7 +4,8 @@ import { PostsService } from '../../services/posts.service';
 import { Observable, filter, map } from 'rxjs';
 import { post } from '../../models/post.model';
 import { PostCardComponent } from '../posts/post-card/post-card.component';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { AuthenticateService } from '../../services/authenticate.service';
 
 @Component({
   selector: 'app-home',
@@ -15,10 +16,18 @@ import { RouterModule } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private postService: PostsService) { }
+  constructor(private postService: PostsService, private authService: AuthenticateService,
+    private route: Router) { }
 
   posts: Observable<Array<post>> | undefined;
   ngOnInit(): void {
     this.posts = this.postService.getAllPosts().pipe(map(response => response.data));
+  }
+  logout() {
+    this.authService.logout().subscribe(() => {
+      localStorage.clear();
+      this.route.navigateByUrl('/login');
+
+    })
   }
 }
