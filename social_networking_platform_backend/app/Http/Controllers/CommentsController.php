@@ -7,11 +7,16 @@ use App\Services\CommentsService;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\CommentRequest;
+use App\Notifications\postReactNotification;
+use App\Models\Post;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class CommentsController extends Controller
 {
     /**
      * @var commentsService
+     * @var changeDetect
      */
     private CommentsService $commentsService;
 
@@ -31,6 +36,9 @@ class CommentsController extends Controller
 
     public function addComment(CommentRequest $request,int $postId) {
         $this->commentsService->addComment($request, $postId);
+        $notifyTo = Post::find($postId)->user;
+        $notifyTo->notify(new postReactNotification(Auth::user()));
+        
         return $this->successResponse([], 'Added successfully', 204);
     }
 }
