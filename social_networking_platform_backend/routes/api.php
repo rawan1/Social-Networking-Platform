@@ -33,12 +33,13 @@ Route::prefix('posts')->controller(PostController::class)->middleware('auth:api'
     Route::get('getPost/{id}','getById');
     Route::post('createPost','storePost');
     Route::put('updatePost/{id}','updatePost');
+    Route::post('likePost/{id}', 'likePost');
     Route::get('searchPosts','searchPost');
 });
 
 Route::prefix('comments')->controller(CommentsController::class)->middleware('auth:api')->group(function () {
-    Route::get('post-comments/{postId}','showComments');
-    Route::post('add-comment/{postId}','addComment');
+    Route::get('postComments/{postId}','showComments');
+    Route::post('addComment/{postId}','addComment');
 
 });
 

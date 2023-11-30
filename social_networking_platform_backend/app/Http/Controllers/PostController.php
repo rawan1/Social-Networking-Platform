@@ -32,15 +32,25 @@ class PostController extends Controller
 
     /**
      * Display a listing of the posts.
-     ** @param  PostRequest  $request
+     ** @param  Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getAllPosts(PostRequest $request): JsonResponse
+    public function getAllPosts(Request $request): JsonResponse
     {
         $posts = $this->postsService->getAll(max($request->input('limit'), 10));
         return $this->successResponse($posts);
     }
 
+
+    public function likePost(int $postId) {
+        try {
+            $posts = $this->postsService->likePost($postId);
+            return $this->successResponse($postId);
+        }catch (Exception $e) {
+            return $this->errorResponse($e->getStatus(), $e->getMessage());
+        }
+       
+    }
 
     /**
      * save new post in the db

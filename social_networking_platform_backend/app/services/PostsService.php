@@ -3,7 +3,9 @@
 namespace App\Services;
 use Illuminate\Support\Collection;
 use App\Models\Post;
+use App\Models\Like;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 
 class PostsService
@@ -15,9 +17,9 @@ class PostsService
      */
     public function getAll($limit)
     {
-        $posts = Post::select(['title', 'description', 'fileUrl', 'tags']);
+        $posts = Post::with('user')->withCount('likes')->paginate($limit)->items();
 
-        return $posts->paginate($limit)->items();
+        return $posts;
     }
 
     public function getPostById($id)
@@ -75,6 +77,14 @@ class PostsService
               $post->save();
         }
     }
+
+    public function likePost($postId)
+    {
+        $user = Auth::user();
+        $post = Post::find($postId);
+        $post->likes()->save(new Like(['user_id' => $user-> id]));
+    }
+
     public function searchPosts($searchTerm) 
     {
 
